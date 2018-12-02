@@ -31,6 +31,12 @@ title('Przebieg czasowy - sinus');
 ylabel('x');
 xlabel('t[s]');
 
+%Kwantyzacja
+kwant = uencode(wykresSinus, 2);
+kwant = udecode(kwant, 2);
+figure;
+plot(i, kwant);
+
 % Bialy szum
 figure;
 wykresBialySzum = randn(1001, 1);
@@ -102,17 +108,20 @@ ylabel('dB');
 xlabel('f[Hz]');
 
 %% zad 4 
+fx = 50;
+N = fp;
 fp=10000;
 pr=[0:1:fp-1];
 x=sin(2*pi*fx/fp*pr);
-t=(0:6999)/fp;
+t=(0:fp-1)/fp;
  
 kwant = uencode(x,8);
 kwant = udecode(kwant,8);
 plot(t,kwant);
+figure;
 X=fft(kwant,fp);
 GWM=(abs(X).^2)/N
-plot(0:fn,10*log10(GWM(1:fn+1)))
+plot(0:fx,10*log10(GWM(1:fx+1)))
 
 %% zad 5
 
