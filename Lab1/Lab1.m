@@ -3,50 +3,66 @@
     DAWID TOBOR
 %}
 
-clear all;
+%% ZADANIE 1
+clear variables;
 close all;
 clc;
 
-% ZADANIE 1
-fp=2000; % Czestotliwosc probkowania
-fx=40; % Czestotliwosc sygnalu
-A=1; 
-t=(0:1000)/fp; % Czas trwania sygnalu
+fp = 500; % Czestotliwosc probkowania
+f = 40; % Czestotliwosc sygnalu
+A = 1; % Amplituda sygnalu 
+N = fp;
 
-%sygnal prostokatny
-wykres_prostokat=A*square(2*pi*fx*t);
-stairs(t,wykres_prostokat);
-title('przebieg czasowy sygnal prostok�tny');
+i = (0:1000) / fp; % Wektor dyskretny czasu
+
+% Prostokat
+figure;
+wykresProstokat = A * square(2 * pi * f * i);
+stairs(i, wykresProstokat);
+title('Przebieg czasowy - prostokat');
 ylabel('x');
 xlabel('t[s]');
 
-%sygnal sinus
-wykres_sinus=A*sin(2*pi*fx*t);
-plot(t,wykres_sinus);
-title('przebieg czasowy sygnal sin');
+% Sinus
+figure;
+wykresSinus = A * sin(2 * pi * f * i);
+stairs(i, wykresSinus);
+title('Przebieg czasowy - sinus');
 ylabel('x');
 xlabel('t[s]');
 
-%bialy szum
-wykres_szum=randn(size(t));
-plot(t,wykres_szum)
-title('przebieg czasowy bia�y szum');
+% Bialy szum
+figure;
+wykresBialySzum = randn(1001, 1);
+plot(i, wykresBialySzum);
+title('Przebieg czasowy - biały szum');
 ylabel('x');
 xlabel('t[s]');
+
+fft_x = fft(wykresSinus, fp)/N;
+gwm_x = 20*log10(abs(fft_x));
+figure;
+plot((0:fp/2), gwm_x(1:fp/2+1));
 
 %% zad 2
-x=importdata('C:\Users\Tomasz M\Desktop\sygnaly_001\syg08_7kHz');
-fp=7000;
-N=fs;
+x = importdata('../Materiały/syg_2018/sygnaly_00/syg06_3000Hz');
+fp = 7000;
+N = fp;
 fn=fp/2;
 pr=[0:1:fp-1];
-X=fft(x,fp);
-GWM=(abs(X).^2)/N
+X = fft(x,fp);
+GWM = (abs(X).^2)/N
 plot(0:fn,10*log10(GWM(1:fn+1)))
 title('GWM')
 ylabel('dB');
 xlabel('f[Hz]');
 
+fft_x = fft(x, fp)/N;
+gwm_x = 20*log10(abs(fft_x));
+figure;
+plot((0:fp/2), gwm_x(1:fp/2+1));
+
+figure;
 fp=10000;
 t=(0:99)/fp;
 plot(t,x(1:100));
